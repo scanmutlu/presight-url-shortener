@@ -1,0 +1,98 @@
+openapi: 3.0.1
+info:
+  title: Swagger Url-Shortener
+  description: This is a simple url-shortener. You can generate a shortener and goto
+    original site via this shorten link.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: canmtlu@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: http://localhost:3000
+tags:
+- name: generate
+  description: Generate Url-Shortener key
+- name: go to
+  description: Redirect to target site
+paths:
+  /generate:
+    post:
+      tags:
+      - generate
+      summary: Generate the shortener key
+      operationId: generate
+      requestBody:
+        description: Url Object that needs to be generation of shortener key
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UrlInput'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UrlInput'
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Url'
+        400:
+          description: Bad Request. Invalid Url
+          content: {}
+        405:
+          description: Invalid input
+          content: {}
+      x-codegen-request-body-name: body
+  /goto/url:
+    get:
+      tags:
+      - go to
+      summary: Redirect to the original link
+      description: Redirect to the original link
+      operationId: goto
+      parameters:
+        - name: urlShortener
+          in: query
+          description: Url Shortener Key
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: successful operation
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    UrlInput:
+      type: object
+      properties:
+        url:
+          type: string
+      xml:
+        name: UrlInput
+    Url:
+      type: object
+      properties:
+        url:
+          type: string
+        urlShortener:
+          type: integer
+          format: int64
+        version:
+          type: integer
+          format: int64
+        createDate:
+          type: string
+        updateDate:
+          type: string
+      xml:
+        name: Url
